@@ -1,3 +1,5 @@
+import org.apache.poi.ss.formula.functions.T;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,20 +7,27 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.Timer;
 
 
 public class newAnaEkran {
+
 
     JButton problembirButton = new JButton();
     JButton problemikiButton = new JButton();
     JButton baslaButonu=new JButton();
     JButton bitirButonu=new JButton();
     JButton urlButonu=new JButton();
+    static JLabel degerGoster = new JLabel();
 
     static ArrayList<int[]> enKisaYol = new ArrayList<>();
     ExecutorService executor = Executors.newSingleThreadExecutor();
+    Timer timer;
+
     public void oyunCalistir (){
         problembirButton.addActionListener(new ActionListener() {
             @Override
@@ -37,53 +46,48 @@ public class newAnaEkran {
                     public void actionPerformed(ActionEvent e) {
                         executor.execute(new Runnable() {
                             public void run() {
-                                LabirentBFS.sifirla();
                                 try {
-                                    LabirentBFS lab = new LabirentBFS();
-                                } catch (IOException ex) {
-                                    throw new RuntimeException(ex);
-                                }
-                                LabirentBFS.baslangicBitisBelirle();
-
-                                int[] baslangicDugumu = {LabirentBFS.SatirBas, LabirentBFS.SutunBas};
-                                int[] hedefDugumu = {LabirentBFS.SatirBit, LabirentBFS.SutunBit};
-                                LabirentBFS.baslangicBoya();
-                                try {
-                                    LabirentBFS.rastgeleDolas(baslangicDugumu,hedefDugumu);
+                                    LabirentBFS.sayac = 0;
+                                    oyun oyun = new oyun();
                                 } catch (InterruptedException ex) {
                                     throw new RuntimeException(ex);
                                 }
-                                try {
-                                    enKisaYol = LabirentBFS.BFS(KareliEkran.labirentt, hedefDugumu, baslangicDugumu);
-                                } catch (InterruptedException ex) {
-                                    throw new RuntimeException(ex);
-                                }
-                                 LabirentBFS.bitisBoya();
-                                try {
-                                    Thread.sleep(1500);
-                                } catch (InterruptedException ex) {
-                                    throw new RuntimeException(ex);
-                                }
-                                LabirentBFS.tumEkraniGoster();
+                                System.out.println(LabirentBFS.sayac);
                             }
+
                         });
                     }
                 });
-                bitirButonu.setBackground(Color.WHITE);
-                bitirButonu.setText("Hızlı Bitir");
+
+                bitirButonu.setBackground(Color.yellow);
+                bitirButonu.setText("HIZLI BİTİR");
                 menu.add(bitirButonu);
                 bitirButonu.addActionListener(new ActionListener() {
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
-
+                        enKisaYol.clear();
                         LabirentBFS.speed = 0;
-                        System.out.println(enKisaYol.size());
+
+                        try {Thread.sleep(400);
+                        } catch (InterruptedException ex) {
+                            throw new RuntimeException(ex);
+                        }
+
+                        try {
+                            enKisaYol = LabirentBFS.BFS(KareliEkran.labirentt,oyun.geciciBitis,oyun.geciciBaslangic);
+                            LabirentBFS.bitisBoya();
+                        } catch (InterruptedException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                       // System.out.println(enKisaYol.size());
 
                     }
                 });
             menu.add(urlButonu);
             urlButonu.setBackground(Color.gray);
             urlButonu.setText("URL DEĞİŞTİR");
+
             urlButonu.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -95,10 +99,16 @@ public class newAnaEkran {
                     }
                 }
             });
+            menu.add(degerGoster);
+
+            //degerGoster.setText("ADIM SAYISI : " + LabirentBFS.sayac + "");
+
             }
 
 
+
         });
+
 
         problemikiButton.addActionListener(new ActionListener() {
             @Override
@@ -110,7 +120,12 @@ public class newAnaEkran {
                 }
             }
         });
+
+
+
     }
+
+
 
     public newAnaEkran (){
         JFrame anaEkran = new JFrame("ANA EKRAN");

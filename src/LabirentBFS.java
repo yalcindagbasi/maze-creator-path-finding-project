@@ -1,3 +1,5 @@
+    import org.apache.poi.ss.formula.functions.T;
+
     import javax.swing.*;
     import java.awt.*;
     import java.io.IOException;
@@ -11,9 +13,11 @@
         static int SatirBit;
         static int SutunBit;
         static int sayac=0;
-        static int speed =50;
-      //   static ArrayList<int[]> enKisaYol = new ArrayList<>();
-          public LabirentBFS() throws IOException {
+        static int speed =30;
+        int time;
+
+        static int count=0;
+              public LabirentBFS() throws IOException {
             KareliEkran ekran = new KareliEkran();
             for (int i = 0; i <KareliEkran.jp.length ; i++) {
                 for (int j = 0; j <KareliEkran.jp.length ; j++) {
@@ -29,7 +33,7 @@
             kuyruk.offer(baslangicDugumu);
             oncekiKonum.put(Arrays.toString(baslangicDugumu), null); // Başlangıç düğümünün önceki konumu yok
 
-                    while (!kuyruk.isEmpty()) {
+                while (!kuyruk.isEmpty()) {
                 int[] gecici = kuyruk.poll();
 
                 if (Arrays.equals(gecici, hedefDugumu)) {
@@ -76,7 +80,7 @@
 
             return null;
         }
-        public static void enkisaYoluBoya(){
+   /*     public static void enkisaYoluBoya(){
             for (int i = 0; i <newAnaEkran.enKisaYol.size() ; i++) {
                 int gecici[] = new int[2];
                     gecici = newAnaEkran.enKisaYol.get(i);
@@ -84,6 +88,8 @@
             }
 
         }
+
+    */
         public static boolean bitisGorunduMu(int baslangicNoktasi[],int hedefNoktasi[]){
               int x = hedefNoktasi[0];
               int y = hedefNoktasi[1];
@@ -111,75 +117,165 @@
             }
           }
         public static void rastgeleDolas(int baslangicNoktasi[],int bitisNoktasi[]) throws InterruptedException {
-            Random rand = new Random();
-            while (!Arrays.equals(baslangicNoktasi,bitisNoktasi)){
-                Thread.sleep(speed);
-                int x = baslangicNoktasi[0];
-                int y = baslangicNoktasi[1];
-                int rastgeleSayi = rand.nextInt(4);
+
+            sayac++;
+            if((bitisNoktasi[0] ==baslangicNoktasi[0] && baslangicNoktasi[1] == bitisNoktasi[1]+1) || (bitisNoktasi[0] == baslangicNoktasi[0] && baslangicNoktasi[1] == bitisNoktasi[1]-1) ){
+                    newAnaEkran.degerGoster.setText("HEMEN YANINDA");
+
+            }
+            else if((bitisNoktasi[1] ==baslangicNoktasi[1] && baslangicNoktasi[0] == bitisNoktasi[0]+1) || (bitisNoktasi[1] == baslangicNoktasi[1] && baslangicNoktasi[0] == bitisNoktasi[0]-1) ){
+                newAnaEkran.degerGoster.setText("HEMEN YANINDA");
+            }
+            else if (Arrays.equals(baslangicNoktasi,bitisNoktasi)){
+                newAnaEkran.degerGoster.setText("BAŞLANGIÇ VE HEDEF\nNOKTASI AYNI YERDİR");
+            }
+            else{
+                while (!Arrays.equals(baslangicNoktasi,bitisNoktasi)){
+                    // newAnaEkran.degerGoster.setText("GEÇİLEN KARE SAYISI : " + sayac + "");
+                    Random rand = new Random();
+                    Thread.sleep(speed);
+                    int x = baslangicNoktasi[0];
+                    int y = baslangicNoktasi[1];
+
+                    int rastgeleSayi;
+
+                    rastgeleSayi = rand.nextInt(4);
+
+                    //sağ yukarı
                     if(bitisGorunduMu(baslangicNoktasi,bitisNoktasi)){
                         bitiseGit(baslangicNoktasi,bitisNoktasi);
                     }
-              switch (rastgeleSayi){
-                  case 0 : {
-                      if(KareliEkran.labirentt[x+1][y] ==0){
-                          baslangicNoktasi[0] = x+1;
-                          baslangicNoktasi[1] = y;
-                          KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
-                          etrafiniBoya(baslangicNoktasi);
-                          rastgeleDolas(baslangicNoktasi,bitisNoktasi);
+                    else{
+                        if(KareliEkran.jp[x-1][y].getBackground().equals(Color.gray)||KareliEkran.jp[x+1][y].getBackground().equals(Color.gray)||KareliEkran.jp[x][y-1].getBackground().equals(Color.gray)||KareliEkran.jp[x][y+1].getBackground().equals(Color.gray)){
+                            if (KareliEkran.jp[x-1][y].getBackground().equals(Color.gray)){
+                                rastgeleSayi = 1;
+                            }
+                            else if(KareliEkran.jp[x+1][y].getBackground().equals(Color.gray)){
+                                rastgeleSayi =0;
 
-                      }
-                      break;
-                  }
-                  case 1 : {
-                      if(KareliEkran.labirentt[x-1][y] ==0){
-                          baslangicNoktasi[0] = x-1;
-                          baslangicNoktasi[1] = y;
-                          KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
-                          etrafiniBoya(baslangicNoktasi);
-                          rastgeleDolas(baslangicNoktasi,bitisNoktasi);
+                            }
+                            else if (KareliEkran.jp[x][y-1].getBackground().equals(Color.gray)){
+                                rastgeleSayi = 3;
 
-                      }
-                      break;
-                  }
-                  case 2 : {
+                            }
+                            else if (KareliEkran.jp[x][y+1].getBackground().equals(Color.gray))
+                            {
+                                rastgeleSayi = 2;
+                            }
+                        }
+                        else {
+                            rastgeleSayi = rand.nextInt(3);
+                        }
+                    }
+                switch (rastgeleSayi){
+                    case 0 : {
+                        if(KareliEkran.labirentt[x+1][y] ==0){
+                            baslangicNoktasi[0] = x+1;
+                            baslangicNoktasi[1] = y;
+                            KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
+                            if(KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].getBackground().equals(Color.blue)){
+                                KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.RED);
+                                Thread.sleep(speed);
+                                KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
+                            }
 
-                      if(KareliEkran.labirentt[x][y+1] ==0){
-                          baslangicNoktasi[0] = x;
-                          baslangicNoktasi[1] = y+1;
-                          KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
-                          etrafiniBoya(baslangicNoktasi);
-                          rastgeleDolas(baslangicNoktasi,bitisNoktasi);
-                      }
-                      break;
+                            sayac++;
+                            newAnaEkran.degerGoster.setText("ADIM SAYISI : " + sayac + "");
 
-                  }
-                  case 3 : {
-                      if(KareliEkran.labirentt[x][y-1] ==0){
-                          baslangicNoktasi[0] = x;
-                          baslangicNoktasi[1] = y-1;
-                          KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
-                         etrafiniBoya(baslangicNoktasi);
-                          rastgeleDolas(baslangicNoktasi,bitisNoktasi);
-                      }
-                      break;
-                  }
-              }
+                            etrafiniBoya(baslangicNoktasi);
+                            // rastgeleDolas(baslangicNoktasi,bitisNoktasi);
+                            System.out.println("saga gidildi");
+
+
+                        }
+                        break;
+                    }
+
+                    case 1 : {
+                        if(KareliEkran.labirentt[x-1][y] ==0){
+                            baslangicNoktasi[0] = x-1;
+                            baslangicNoktasi[1] = y;
+                            KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
+                            if(KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].getBackground().equals(Color.blue)){
+                                KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.RED);
+                                Thread.sleep(speed);
+                                KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
+                            }
+
+                            sayac++;
+                            newAnaEkran.degerGoster.setText("ADIM SAYISI : "+ sayac + "");
+                            etrafiniBoya(baslangicNoktasi);
+                            System.out.println("sola gidildi");
+                        }
+
+                        break;
+                    }
+
+                    case 2 : {
+
+                        if(KareliEkran.labirentt[x][y+1] ==0){
+                            baslangicNoktasi[0] = x;
+                            baslangicNoktasi[1] = y+1;
+                            KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
+                            if(KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].getBackground().equals(Color.blue)){
+                                KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.RED);
+                                Thread.sleep(speed);
+                                KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
+                            }
+                            sayac++;
+                            newAnaEkran.degerGoster.setText("ADIM SAYISI : "+ sayac + "");
+
+                            etrafiniBoya(baslangicNoktasi);
+                            //      rastgeleDolas(baslangicNoktasi,bitisNoktasi);
+                            System.out.println("yukarı gidildi");
+
+                        }
+                        break;
+                    }
+                    case 3 : {
+                        if(KareliEkran.labirentt[x][y-1] ==0){
+                            baslangicNoktasi[0] = x;
+                            baslangicNoktasi[1] = y-1;
+                            KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
+                            if(KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].getBackground().equals(Color.blue)){
+                                KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.RED);
+                                Thread.sleep(speed);
+                                KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
+                            }
+
+                            sayac++;
+                            newAnaEkran.degerGoster.setText("ADIM SAYISI : " + sayac + "");
+                            etrafiniBoya(baslangicNoktasi);
+                            //    rastgeleDolas(baslangicNoktasi,bitisNoktasi);
+                            System.out.println("asagı gidildi");
+
+                        }
+                        break;
+                }
+            }
+        }
 
             }
         }
-        public static void etrafiniBoya(int konum[]){
+
+
+
+
+
+
+
+
+
+    public static void etrafiniBoya(int konum[]){
             KareliEkran.jp[konum[0]-1][konum[1]].setVisible(true);
             KareliEkran.jp[konum[0]+1][konum[1]].setVisible(true);
             KareliEkran.jp[konum[0]][konum[1]-1].setVisible(true);
             KareliEkran.jp[konum[0]][konum[1]+1].setVisible(true);
         }
         public static void baslangicBoya(){
-            KareliEkran.jp[SatirBas][SutunBas].setBackground(Color.ORANGE);
+           KareliEkran.jp[SatirBas][SutunBas].setBackground(Color.BLACK);
             KareliEkran.jp[SatirBas][SutunBas].setVisible(false);
-            KareliEkran.jp[SatirBit][SutunBit].setBackground(Color.white);
-            KareliEkran.jp[SatirBit][SutunBit].setVisible(false);
+
 
         }
         public static void baslangicBitisBelirle(){
@@ -187,8 +283,8 @@
             KareliEkran.BitisBelirle(izgara.sayac);
         }
         public static void bitisBoya(){
-            KareliEkran.jp[SatirBas][SutunBas].setBackground(Color.ORANGE);
-            KareliEkran.jp[SatirBit][SutunBit].setBackground(Color.ORANGE);
+            KareliEkran.jp[SatirBas][SutunBas].setBackground(Color.black);
+            KareliEkran.jp[SatirBit][SutunBit].setBackground(Color.magenta);
         }
         public static void boya(int konum[]){
             KareliEkran.jp[konum[0]][konum[1]].setBackground(Color.pink);
@@ -217,7 +313,8 @@
            izgara.sutun=0;
            izgara.sayack = 0;
             KareliEkran.frame =null;
-            LabirentBFS.speed=400;
+            LabirentBFS.speed=30;
+            LabirentBFS.sayac = 0;
           }
 
         public static void main(String[] args) throws IOException, InterruptedException {
@@ -236,7 +333,7 @@
              newAnaEkran.enKisaYol = BFS(KareliEkran.labirentt, geciciBitis, geciciBaslangic);
             System.out.println(newAnaEkran.enKisaYol.size());
              bitisBoya();
-             Thread.sleep(1500);
+          //   Thread.sleep(1500);
              tumEkraniGoster();
 
          }
