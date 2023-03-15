@@ -143,9 +143,14 @@ public class Arayuz extends JFrame {
         if(bittiMi)
             return;
         cell[satirkonum][sutunkonum].setBackground(Color.red);
-        Thread.sleep(speed);
+            Thread.sleep(speed);
 
     }
+    public static void main(String[] args) throws InterruptedException  {
+        Arayuz arayuz= new Arayuz();
+
+    }
+
 }
 
 

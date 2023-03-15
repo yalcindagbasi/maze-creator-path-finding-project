@@ -9,7 +9,10 @@ public class izgara {
     static int sayack=0;
     static int satir=0;
     static int sutun=0;
-    static String fileName = "http://bilgisayar.kocaeli.edu.tr/prolab2/url1.txt";
+     static    String urlBir = "url1.txt";
+       static  String urliki = "url2.txt";
+      static String normalHal = "http://bilgisayar.kocaeli.edu.tr/prolab2/";
+    static String fileName = "http://bilgisayar.kocaeli.edu.tr/prolab2/"+urliki;
     public izgara(String file) throws IOException {
         URL url = new URL(file);
         String line;
@@ -19,9 +22,11 @@ public class izgara {
             sayac++;
         }
         br.close();
+        KareliEkran.labirentt = new int[sayac][sayac];
+        KareliEkran.jp = new JPanel[sayac+2][sayac+2];
     }
 
-    public static void dosyaOku(String filename,int labirentt[][]) throws IOException {
+    public static void dosyaOku(String filename) throws IOException {
 
         URL url = new URL(filename);
         String line;
@@ -36,7 +41,7 @@ public class izgara {
                     break;
                 }
                 else {
-                    labirentt[satir][sutun] = Character.getNumericValue(c);
+                    KareliEkran.labirentt[satir][sutun] = Character.getNumericValue(c);
                     sutun++;
                 }
                 sayack++;
@@ -48,13 +53,13 @@ public class izgara {
         br.close();
     }
 
-    public static int[][] matrisKopyala(int labirent[][]){
-        int yeniBoyut=labirent.length+2;
-        System.out.println(labirent.length);
+    public static int[][] matrisKopyala(){
+        int yeniBoyut=KareliEkran.labirentt.length+2; //etrafına duvar için 2 satır 2 sütün çekilmesi için yaptık.
+        System.out.println(KareliEkran.labirentt.length);
         int geciciMatris [][] = new int[yeniBoyut][yeniBoyut];
-        for (int i = 0; i < labirent.length; i++) {
-            for (int j = 0; j < labirent[i].length; j++) {
-                geciciMatris[i+1][j+1] =labirent[i][j];
+        for (int i = 0; i < KareliEkran.labirentt.length; i++) {
+            for (int j = 0; j < KareliEkran.labirentt[i].length; j++) {
+                geciciMatris[i+1][j+1] =KareliEkran.labirentt[i][j];
             }
         }
         etrafinaDuvarCek(yeniBoyut,geciciMatris);
@@ -69,22 +74,8 @@ public class izgara {
         }
     return geciciMatris;
     }
-    public static void main(String args[]) throws IOException {
-        izgara iz = new izgara(fileName);
-        int labirentt[][] = new int[sayac][sayac];
-        dosyaOku(fileName,labirentt);
-        System.out.println();
-        labirentt = matrisKopyala(labirentt);
-        for (int i = 0; i < labirentt.length; i++) {
-            for (int j = 0; j < labirentt[i].length; j++) {
-                System.out.print(labirentt[i][j] + "\t");
-            }
-            System.out.println();
-        }
-        System.out.println(labirentt.length);
-        }
 
-    }
+}
 
 
 
