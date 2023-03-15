@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,6 +16,8 @@ public class newAnaEkran {
     JButton baslaButonu=new JButton();
     JButton bitirButonu=new JButton();
     JButton urlButonu=new JButton();
+
+    static ArrayList<int[]> enKisaYol = new ArrayList<>();
     ExecutorService executor = Executors.newSingleThreadExecutor();
     public void oyunCalistir (){
         problembirButton.addActionListener(new ActionListener() {
@@ -41,15 +44,21 @@ public class newAnaEkran {
                                     throw new RuntimeException(ex);
                                 }
                                 LabirentBFS.baslangicBitisBelirle();
+
                                 int[] baslangicDugumu = {LabirentBFS.SatirBas, LabirentBFS.SutunBas};
                                 int[] hedefDugumu = {LabirentBFS.SatirBit, LabirentBFS.SutunBit};
                                 LabirentBFS.baslangicBoya();
                                 try {
-                                    ArrayList<int[]> enKisaYol = LabirentBFS.BFS(KareliEkran.labirentt, hedefDugumu, baslangicDugumu);
+                                    LabirentBFS.rastgeleDolas(baslangicDugumu,hedefDugumu);
                                 } catch (InterruptedException ex) {
                                     throw new RuntimeException(ex);
                                 }
-                                LabirentBFS.bitisBoya();
+                                try {
+                                    enKisaYol = LabirentBFS.BFS(KareliEkran.labirentt, hedefDugumu, baslangicDugumu);
+                                } catch (InterruptedException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                                 LabirentBFS.bitisBoya();
                                 try {
                                     Thread.sleep(1500);
                                 } catch (InterruptedException ex) {
@@ -66,7 +75,10 @@ public class newAnaEkran {
                 bitirButonu.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+
                         LabirentBFS.speed = 0;
+                        System.out.println(enKisaYol.size());
+
                     }
                 });
             menu.add(urlButonu);

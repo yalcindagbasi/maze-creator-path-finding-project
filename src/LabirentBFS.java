@@ -11,8 +11,8 @@
         static int SatirBit;
         static int SutunBit;
         static int sayac=0;
-        static int speed =200;
-        // static ArrayList<int[]> enKisaYol;
+        static int speed =50;
+      //   static ArrayList<int[]> enKisaYol = new ArrayList<>();
           public LabirentBFS() throws IOException {
             KareliEkran ekran = new KareliEkran();
             for (int i = 0; i <KareliEkran.jp.length ; i++) {
@@ -25,7 +25,6 @@
         public static ArrayList<int[]> BFS(int[][] labirent, int[] hedefDugumu, int[] baslangicDugumu) throws InterruptedException {
             ArrayList<int[]> komsuYollar = new ArrayList<>();
               Queue<int[]> kuyruk = new LinkedList<>();
-            ArrayList<int[]>enKisaYol = new ArrayList<>();
             Map<String, int[]> oncekiKonum = new HashMap<>();
             kuyruk.offer(baslangicDugumu);
             oncekiKonum.put(Arrays.toString(baslangicDugumu), null); // Başlangıç düğümünün önceki konumu yok
@@ -41,7 +40,7 @@
                     ;
                     while (konum != null) {
                        // Thread.sleep(speed);
-                        enKisaYol.add(konum);
+                        newAnaEkran.enKisaYol.add(konum);
                                 boya(konum);
                                 etrafiniBoya(konum);
                             konum = oncekiKonum.get(Arrays.toString(konum));
@@ -49,8 +48,8 @@
 
 
                     }
-                    Collections.reverse(enKisaYol); //sırayı tersine çeviriyor
-                    return enKisaYol;
+                   // Collections.reverse(enKisaYol); //sırayı tersine çeviriyor
+                    return newAnaEkran.enKisaYol;
                 }
 
 
@@ -67,7 +66,7 @@
                     komsuYollar.add(komsu);
                     kuyruk.offer(komsu);
                     oncekiKonum.put(Arrays.toString(komsu), gecici);
-                   KareliEkran.jp[gecici[0]][gecici[1]].setBackground(Color.cyan);
+                //   KareliEkran.jp[gecici[0]][gecici[1]].setBackground(Color.cyan);
                    etrafiniBoya(komsu);
 
                 }
@@ -76,6 +75,14 @@
 
 
             return null;
+        }
+        public static void enkisaYoluBoya(){
+            for (int i = 0; i <newAnaEkran.enKisaYol.size() ; i++) {
+                int gecici[] = new int[2];
+                    gecici = newAnaEkran.enKisaYol.get(i);
+                    KareliEkran.jp[gecici[0]][gecici[1]].setBackground(Color.pink);
+            }
+
         }
         public static boolean bitisGorunduMu(int baslangicNoktasi[],int hedefNoktasi[]){
               int x = hedefNoktasi[0];
@@ -130,10 +137,11 @@
                           baslangicNoktasi[0] = x-1;
                           baslangicNoktasi[1] = y;
                           KareliEkran.jp[baslangicNoktasi[0]][baslangicNoktasi[1]].setBackground(Color.blue);
-                            etrafiniBoya(baslangicNoktasi);
+                          etrafiniBoya(baslangicNoktasi);
                           rastgeleDolas(baslangicNoktasi,bitisNoktasi);
-                            break;
+
                       }
+                      break;
                   }
                   case 2 : {
 
@@ -216,13 +224,18 @@
 
              LabirentBFS lab = new LabirentBFS();
              baslangicBitisBelirle();
-
              int[] baslangicDugumu = {SatirBas, SutunBas};
              int[] hedefDugumu = {SatirBit, SutunBit};
+            int geciciBaslangic[] = new int[baslangicDugumu.length];
+            int geciciBitis[] = new int[hedefDugumu.length];
+            System.arraycopy(baslangicDugumu,0,geciciBaslangic,0,baslangicDugumu.length);
+            System.arraycopy(hedefDugumu,0,geciciBitis,0,baslangicDugumu.length);
              baslangicBoya();
             rastgeleDolas(baslangicDugumu,hedefDugumu);
-             ArrayList<int[]> enKisaYol = BFS(KareliEkran.labirentt, hedefDugumu, baslangicDugumu);
-            // bitisBoya();
+            System.out.println(baslangicDugumu[0]+ " "+ baslangicDugumu[1]);
+             newAnaEkran.enKisaYol = BFS(KareliEkran.labirentt, geciciBitis, geciciBaslangic);
+            System.out.println(newAnaEkran.enKisaYol.size());
+             bitisBoya();
              Thread.sleep(1500);
              tumEkraniGoster();
 
