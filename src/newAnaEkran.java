@@ -1,4 +1,3 @@
-import org.apache.poi.ss.formula.functions.T;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,29 +15,29 @@ import java.util.Timer;
 
 public class newAnaEkran {
 
-
+    static JButton sureEkrani= new JButton();
     JButton problembirButton = new JButton();
     JButton problemikiButton = new JButton();
     JButton baslaButonu=new JButton();
     JButton bitirButonu=new JButton();
     JButton urlButonu=new JButton();
-    static JLabel degerGoster = new JLabel();
+    static JButton degerGoster = new JButton();
 
     static ArrayList<int[]> enKisaYol = new ArrayList<>();
     ExecutorService executor = Executors.newSingleThreadExecutor();
-    Timer timer;
+
 
     public void oyunCalistir (){
         problembirButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                JFrame menu = new JFrame();
-                menu.setLayout(new GridLayout(1,4));
+                JFrame menu = new JFrame("OYUN MENÜSÜ");
+                menu.setLayout(new GridLayout(1,5));
                 baslaButonu.setBackground(Color.green);
                 menu.setVisible(true);
-                menu.setBounds(1300,40,600,300);
-                menu.add(baslaButonu);
+                menu.setBounds(900,40,1000,300);
+                menu.add(baslaButonu,BorderLayout.CENTER);
                 baslaButonu.setText("OYUNA BAŞLA");
                 baslaButonu.addActionListener(new ActionListener() {
 
@@ -47,12 +46,17 @@ public class newAnaEkran {
                         executor.execute(new Runnable() {
                             public void run() {
                                 try {
+                                    
+                                    sureEkrani.setVisible(false);
                                     LabirentBFS.sayac = 0;
                                     oyun oyun = new oyun();
+                                    sureEkrani.setVisible(true);
                                 } catch (InterruptedException ex) {
                                     throw new RuntimeException(ex);
+                                } catch (IOException ex) {
+                                    throw new RuntimeException(ex);
                                 }
-                                System.out.println(LabirentBFS.sayac);
+
                             }
 
                         });
@@ -61,13 +65,14 @@ public class newAnaEkran {
 
                 bitirButonu.setBackground(Color.yellow);
                 bitirButonu.setText("HIZLI BİTİR");
-                menu.add(bitirButonu);
+                menu.add(bitirButonu,BorderLayout.CENTER);
                 bitirButonu.addActionListener(new ActionListener() {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         enKisaYol.clear();
                         LabirentBFS.speed = 0;
+
 
                         try {Thread.sleep(400);
                         } catch (InterruptedException ex) {
@@ -84,7 +89,7 @@ public class newAnaEkran {
 
                     }
                 });
-            menu.add(urlButonu);
+            menu.add(urlButonu,BorderLayout.CENTER);
             urlButonu.setBackground(Color.gray);
             urlButonu.setText("URL DEĞİŞTİR");
 
@@ -99,12 +104,13 @@ public class newAnaEkran {
                     }
                 }
             });
-            menu.add(degerGoster);
+            degerGoster.setBackground(Color.CYAN);
+            menu.add(degerGoster,BorderLayout.CENTER);
 
-            //degerGoster.setText("ADIM SAYISI : " + LabirentBFS.sayac + "");
+                sureEkrani.setBackground(Color.pink);
+                menu.add(sureEkrani,BorderLayout.CENTER);
 
             }
-
 
 
         });
@@ -113,11 +119,7 @@ public class newAnaEkran {
         problemikiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    Arayuz arayuz = new Arayuz();
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
+                Arayuz arayuz = new Arayuz();
             }
         });
 

@@ -1,0 +1,6 @@
+Başlangıç Koordinatı : [6 2]
+Hedef Koordinatı : [6 4] 
+EN KISA YOL KOORDİNATLARI
+[6, 2] 
+[6, 3]
+[6, 4] 

@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Random;
 
@@ -11,8 +9,6 @@ public class KareliEkran extends JFrame  {
 
     static int labirentt[][];
     static JPanel jp[][];
-
-
     public KareliEkran() throws IOException {
         frame = new JFrame();
         izgara iz = new izgara(izgara.fileName); //sayac alınması için
@@ -34,12 +30,8 @@ public class KareliEkran extends JFrame  {
         frame.setBounds(0,0,1000,900);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridLayout(sayi,sayi));
-
-     //   merkezPanel.setBounds(0,0,900,900);
         doldur(sayi, labirent, jp);
         frame.setVisible(true);
-      // butonOlustur();
-
     }
     public static void BaslangicBelirle(int sayi){
     LabirentBFS.SatirBas = random.nextInt(sayi);
@@ -61,14 +53,15 @@ public class KareliEkran extends JFrame  {
                 LabirentBFS.SutunBit= random.nextInt(sayi);
             }
         }
-        jp[LabirentBFS.SatirBit][LabirentBFS.SutunBit].setBackground(Color.white);
+        jp[LabirentBFS.SatirBit][LabirentBFS.SutunBit].setBackground(Color.MAGENTA);
     }
     public static void doldur(int sayi, int geciciMatris[][], JPanel jp[][]) {
         for (int i = 0; i < sayi; i++) {
             for (int j = 0; j < sayi; j++) {
-                jp[i][j] = new JPanel();
-                if (geciciMatris[i][j] != 0) {
+                    jp[i][j] = new JPanel();
+                    if (geciciMatris[i][j] != 0) {
                     jp[i][j].setBackground(Color.darkGray);
+
                 } else {
                     jp[i][j].setBackground(Color.gray);
                 }
@@ -78,9 +71,6 @@ public class KareliEkran extends JFrame  {
         }
     }
     public static void main(String[] args) throws IOException {
-           KareliEkran ekran = new KareliEkran();
-       // baslangicBitisPanel[0] = baslangic(labirentt.length,labirentt,jp);
-        // baslangicBitisPanel[1] = bitis(labirentt.length,labirentt,jp);
 
     }
 
